@@ -1,0 +1,24 @@
+psql
+CREATE EXTENSION pgcrypto;
+SELECT crypt('mypass', gen_salt('bf', 4));
+crypt
+--------------------------------------------------------------
+ $2a$04$1bfMQDOR6aLyD4q3KVb8/ujG7ZAkyie4d/s3ABwuZNbzkFFgXtC76
+
+We can now execute the statement below to store the string safely in the database:
+
+INSERT INTO users (user_id,enc_pass) VALUES (1,'$2a$04$UKAn6OL1mwTA1sXLYwLe/OIk5YY5J25B9zRIJtpMd3Z.nRxhgtk1S');
+To check if the password is correct, run the query below — specifying "mypass" returns a result row, indicating that it is correct.
+
+SELECT * FROM users WHERE user_id = 1 AND encpass = crypt('mypass', encpass);
+user_id | encpass
+--------+--------------------------------------------------------------
+1       | $2a$04$1bfMQDOR6aLyD4q3KVb8/ujG7ZAkyie4d/s3ABwuZNbzkFFgXtC76
+(1 row)
+But specifying "hacker" does not return any rows, indicating that the value is incorrect.
+
+SELECT * FROM users WHERE user_id = 1 AND encpass = crypt('hacker', encpass);
+user_id | encpass
+--------+---------
+(0 rows)
+============
