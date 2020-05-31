@@ -1,0 +1,77 @@
+
+for centos 7
+
+Install pg 9.6 as major
+
+
+sudo yum install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+sudo yum install -y postgresql96 postgresql96-server postgresql96-contrib wget
+sudo /usr/pgsql-9.6/bin/postgresql96-setup initdb
+sudo systemctl enable postgresql-9.6
+
+
+sudo vi  /var/lib/pgsql/9.6/data/pg_hba.conf
+    host    all             all             0.0.0.0/0        md5
+
+
+sudo vi  /var/lib/pgsql/9.6/data/postgresql.conf
+
+    listen_addresses = '*'
+    port=5432
+
+sudo systemctl start postgresql-9.6
+sudo systemctl status postgresql-9.6
+
+sudo su - postgres
+psql
+\password
+CREATE DATABASE sampledatabase;
+\q
+
+## instering sample dataset
+
+wget https://raw.githubusercontent.com/morenoh149/postgresDBSamples/master/worldDB-1.0/world.sql
+psql -d sampledatabase -f world.sql
+
+# varify that database was imported
+
+psql
+\l
+\c sampledatabase
+\dt
+\q
+
+To back up your database installation, type:
+
+    pg_dumpall -U postgres > /tmp/backup-9.6.sql
+
+    also backup using pgadmin
+
+Shut down the old server:
+    sudo systemctl stop postgresql-9.6
+    sudo systemctl status postgresql-9.6
+
+Install the new version of PostgreSQL
+    sudo yum install -y postgresql12 postgresql12-contrib postgresql12-server 
+    sudo /usr/pgsql-12/bin/postgresql-12-setup initdb
+    
+
+sudo vi  /var/lib/pgsql/12/data/pg_hba.conf
+    host    all             all             0.0.0.0/0        md5
+
+
+sudo vi  /var/lib/pgsql/12/data/postgresql.conf
+
+    listen_addresses = '*'
+    port=5432
+
+    sudo systemctl start postgresql-12
+    sudo systemctl status postgresql-12
+
+
+
+Restore  data from backup 
+    sudo su - postgres
+    psql -U postgres -f /tmp/backup-9.6.sql
+
+varify data was inserted
