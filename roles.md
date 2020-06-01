@@ -20,6 +20,7 @@ REVOKE mayor FROM people;
 
 ## Role Inheritance
 
+```
 CREATE ROLE people LOGIN INHERIT;
 CREATE ROLE mayor NOINHERIT;
 CREATE ROLE librarian NOINHERIT;
@@ -33,3 +34,4 @@ SET ROLE librarian;
 RESET ROLE;
 
 DROP ROLE role_name;
+```
