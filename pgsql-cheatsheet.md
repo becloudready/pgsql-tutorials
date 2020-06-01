@@ -1,4 +1,4 @@
-psql Commands
+## psql Commands
 
 psql -d database -U  user -W
 
