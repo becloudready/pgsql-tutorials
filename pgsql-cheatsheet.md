@@ -60,5 +60,8 @@ systemctl start postgresql-12
 
 systemctl restart postgresql-12
 
+# Config
+
+SELECT pg_reload_conf();
 
 shared_preload_libraries = 'pg_stat_statements'
