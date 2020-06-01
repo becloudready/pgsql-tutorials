@@ -57,6 +57,7 @@ Execute psql commands from a file
 # Service Restart
 
 systemctl start postgresql-12
+
 systemctl restart postgresql-12
 
 
