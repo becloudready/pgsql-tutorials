@@ -18,7 +18,7 @@ INSERT INTO customers VALUES (1,'ACTIVE',100), (2,'RECURRING',20), (3,'EXPIRED',
 SELECT tableoid::regclass,* FROM customers;
 ```
 ## Partition by Hash
-
+```
 CREATE TABLE people (
     id int not null,
     birth_date date not null,
@@ -43,3 +43,4 @@ INSERT INTO people (id, birth_date, country_code, name) VALUES
 SELECT schemaname,relname,n_live_tup 
    FROM pg_stat_user_tables 
    ORDER BY n_live_tup DESC;
+```
