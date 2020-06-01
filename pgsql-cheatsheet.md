@@ -6,6 +6,10 @@ psql -h host -d database -U user -W
 
 psql -U user -h host "dbname=db sslmode=require"
 
+## Import database
+
+psql -d sampledatabase -f world.sql
+
 postgres=# \c dvdrental
 
 List available databases
@@ -54,3 +58,4 @@ Execute psql commands from a file
 
 systemctl start postgresql-12
 
+shared_preload_libraries = 'pg_stat_statements'
