@@ -8,8 +8,8 @@ psql -U user -h host "dbname=db sslmode=require"
 
 ## Import database
 
-psql -d sampledatabase -f world.sql
-
+psql -d <db-name> -f <file name>
+  
 postgres=# \c dvdrental
 
 List available databases
