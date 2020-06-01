@@ -54,8 +54,10 @@ Execute psql commands from a file
 
 \i filename
 
-# Configuration
+# Service Restart
 
 systemctl start postgresql-12
+systemctl restart postgresql-12
+
 
 shared_preload_libraries = 'pg_stat_statements'
