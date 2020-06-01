@@ -1,16 +1,20 @@
 ## Basic Roles
 
-Import the database
 
+```
 CREATE ROLE people WITH PASSWORD 'pass' VALID UNTIL '2022-01-01';
+
 CREATE ROLE bigboss SUPERUSER;
+
 CREATE ROLE admin CREATEDB;
+
 CREATE ROLE security CREATEROLE;
+
 
 CREATE ROLE mayor;
 GRANT mayor TO people;
 REVOKE mayor FROM people;
-
+```
 
 
 
