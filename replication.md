@@ -10,7 +10,7 @@
 3. Create an user named replication with REPLICATION privileges.
 
 ```
-CREATE ROLE replication WITH REPLICATION PASSWORD 'password' LOGIN
+CREATE ROLE replication WITH REPLICATION PASSWORD 'password' LOGIN;
 ```
 4. Set up connections and authentication on the primary so that the standby server can successfully connect to the replication pseudo-database on the primary.
 
