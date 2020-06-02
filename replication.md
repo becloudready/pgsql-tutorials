@@ -102,32 +102,7 @@ pg_basebackup -h 192.168.0.28 -U replicator -p 5432 -D $PGDATA -P -Xs -R
 pg_basebackup: error: directory "/var/lib/pgsql/12/data" exists but is not empty
 ```
 
-Create a recovery command file in the standby server; the following parameters are required for streaming replication.
 
-$ $EDITOR recovery.conf
-```
-# Note that recovery.conf must be in $PGDATA directory.
-# It should NOT be located in the same directory as postgresql.conf
-
-# Specifies whether to start the server as a standby. In streaming replication,
-# this parameter must to be set to on.
-standby_mode          = 'on'
-
-# Specifies a connection string which is used for the standby server to connect
-# with the primary.
-primary_conninfo      = 'host=192.168.0.10 port=5432 user=replication password=password'
-
-# Specifies a trigger file whose presence should cause streaming replication to
-# end (i.e., failover).
-trigger_file = '/path_to/trigger'
-
-# Specifies a command to load archive segments from the WAL archive. If
-# wal_keep_segments is a high enough number to retain the WAL segments
-# required for the standby server, this may not be necessary. But
-# a large workload can cause segments to be recycled before the standby
-# is fully synchronized, requiring you to start again from a new base backup.
-restore_command = 'cp /path_to/archive/%f "%p"'
-```
 
 Start postgres in the standby server. It will start streaming replication.
 
@@ -158,15 +133,3 @@ postgres=# select * from pg_stat_wal_receiver;
 ```
 
 
-### How to do failover
-
-Create the trigger file in the standby after the primary fails.
-
-How to stop the primary or the standby server
-
-Shut down it as usual (pg_ctl stop).
-
-How to restart streaming replication after failover
-
-Repeat the operations from 6th; making a fresh backup, some configurations and starting the original primary as the standby. The primary server doesn't 
-need to be stopped during these operations.
