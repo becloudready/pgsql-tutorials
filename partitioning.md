@@ -1,24 +1,24 @@
 
 ## Range Partitioning
-
+```
 CREATE TABLE customers (id INTEGER, status TEXT, arr NUMERIC) PARTITION BY RANGE(arr);
 CREATE TABLE cust_arr_small PARTITION OF customers FOR VALUES FROM (MINVALUE) TO (25);
 CREATE TABLE cust_arr_medium PARTITION OF customers FOR VALUES FROM (25) TO (75);
 CREATE TABLE cust_arr_large PARTITION OF customers FOR VALUES FROM (75) TO (MAXVALUE);
 INSERT INTO customers VALUES (1,'ACTIVE',100), (2,'RECURRING',20), (3,'EXPIRED',38), (4,'REACTIVATED',144);
 SELECT tableoid::regclass,* FROM customers;
-
+```
 ## List Partitioning
-
+```
 CREATE TABLE customers (id INTEGER, status TEXT, arr NUMERIC) PARTITION BY LIST(status);
 CREATE TABLE cust_active PARTITION OF customers FOR VALUES IN ('ACTIVE');
 CREATE TABLE cust_archived PARTITION OF customers FOR VALUES IN ('EXPIRED');
 CREATE TABLE cust_others PARTITION OF customers DEFAULT;
 INSERT INTO customers VALUES (1,'ACTIVE',100), (2,'RECURRING',20), (3,'EXPIRED',38), (4,'REACTIVATED',144);
 SELECT tableoid::regclass,* FROM customers;
-
+```
 ## Partition by Hash
-
+```
 CREATE TABLE people (
     id int not null,
     birth_date date not null,
@@ -43,3 +43,4 @@ INSERT INTO people (id, birth_date, country_code, name) VALUES
 SELECT schemaname,relname,n_live_tup 
    FROM pg_stat_user_tables 
    ORDER BY n_live_tup DESC;
+```

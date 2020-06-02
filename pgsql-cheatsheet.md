@@ -1,4 +1,4 @@
-psql Commands
+## psql Commands
 
 psql -d database -U  user -W
 
@@ -8,8 +8,11 @@ psql -U user -h host "dbname=db sslmode=require"
 
 ## Import database
 
-psql -d sampledatabase -f world.sql
+```
 
+psql -d <db-name> -f <file name>
+  
+  ```
 postgres=# \c dvdrental
 
 List available databases
@@ -54,8 +57,14 @@ Execute psql commands from a file
 
 \i filename
 
-# Configuration
+# Service Restart
 
 systemctl start postgresql-12
+
+systemctl restart postgresql-12
+
+# Config
+
+SELECT pg_reload_conf();
 
 shared_preload_libraries = 'pg_stat_statements'
