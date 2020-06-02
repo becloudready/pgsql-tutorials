@@ -12,7 +12,7 @@ CREATE ROLE replication WITH REPLICATION PASSWORD 'password' LOGIN
 $ $EDITOR postgresql.conf
 
 
-listen_addresses = '192.168.0.10'
+listen_addresses = '*'
 
 $ $EDITOR pg_hba.conf
 
