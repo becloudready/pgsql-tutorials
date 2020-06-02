@@ -102,6 +102,7 @@ pg_basebackup -h 192.168.0.28 -U replicator -p 5432 -D $PGDATA -P -Xs -R
 pg_basebackup: error: directory "/var/lib/pgsql/12/data" exists but is not empty
 ```
 
+To fix it, rename the data folder.
 
 
 Start postgres in the standby server. It will start streaming replication.
