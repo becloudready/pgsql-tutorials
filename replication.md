@@ -69,11 +69,7 @@ max_wal_senders = 5
 # not be necessary.
 wal_keep_segments = 32
 
-# Enable WAL archiving on the primary to an archive directory accessible from
-# the standby. If wal_keep_segments is a high enough number to retain the WAL
-# segments required for the standby server, this is not necessary.
-archive_mode    = on
-archive_command = 'cp %p /path_to/archive/%f'
+
 ```
 
 ### SQL Command to setup this
