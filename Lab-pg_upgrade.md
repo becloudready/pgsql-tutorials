@@ -59,3 +59,14 @@ yum install -y postgresql12 postgresql12-contrib postgresql12-server
  systemctl start postgresql-12
  systemctl status postgresql-12
  ```
+ 
+ ## Analyze and cleanup
+ 
+ Optimizer statistics are not transferred by pg_upgrade so,
+once you start the new server, consider running:
+ 
+ ```
+ ./analyze_new_cluster.sh
+
+ "/usr/pgsql-12/bin/vacuumdb" --all --analyze-only
+```
