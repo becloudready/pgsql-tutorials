@@ -13,11 +13,8 @@
 
 ## Create sampledatabase
 ```
- su - postgres
-psql
-\password
-CREATE DATABASE sampledatabase;
-\q
+su - postgres
+createdb sampledatabase
 ```
 ## instering sample dataset
 ```
