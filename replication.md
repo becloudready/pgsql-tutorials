@@ -2,6 +2,11 @@
 
 1. Install postgres in the primary and standby server as usual. This requires only configure, make and make install.
 2. Create the initial database cluster in the primary server as usual, using initdb.
+
+```
+/usr/pgsql-12/bin/postgresql-12-setup initdb
+```
+
 3. Create an user named replication with REPLICATION privileges.
 
 ```
