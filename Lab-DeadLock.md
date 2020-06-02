@@ -9,6 +9,7 @@ BEGIN ;  # THIS WILL KEEP CONNECTION ALIVE
 BEGIN  # will get this output
 
 UPDATE country SET continent='Europe' WHERE code='USA';   
+
 UPDATE 1  # will give this output - started query on row - USA , hence row - USA  is in use
 
 
