@@ -8,10 +8,14 @@
 CREATE ROLE replication WITH REPLICATION PASSWORD 'password' LOGIN
 ```
 4. Set up connections and authentication on the primary so that the standby server can successfully connect to the replication pseudo-database on the primary.
+
 $ $EDITOR postgresql.conf
 
+
 listen_addresses = '192.168.0.10'
+
 $ $EDITOR pg_hba.conf
+
 ```
 # The standby server must connect with a user that has replication privileges.
 # TYPE  DATABASE        USER            ADDRESS                 METHOD
@@ -21,18 +25,31 @@ $ $EDITOR pg_hba.conf
 The following parameters on the master are considered as mandatory when setting up streaming replication.
 
 archive_mode : Must be set to ON to enable archiving of WALs.
+
 wal_level : Must be at least set to hot_standby  until version 9.5 or replica  in the later versions.
+
 max_wal_senders : Must be set to 3 if you are starting with one slave. For every slave, you may add 2 wal senders.
-wal_keep_segments : Set the WAL retention in pg_xlog (until PostgreSQL 9.x) and pg_wal (from PostgreSQL 10). Every WAL requires 16MB of space unless you have explicitly modified the WAL segment size. You may start with 100 or more depending on the space and the amount of WAL that could be generated during a backup.
-archive_command : This parameter takes a shell command or external programs. It can be a simple copy command to copy the WAL segments to another location or a script that has the logic to archive the WALs to S3 or a remote backup server.
+
+wal_keep_segments : Set the WAL retention in pg_xlog (until PostgreSQL 9.x) and pg_wal (from PostgreSQL 10). Every WAL requires 16MB of space unless 
+you have explicitly modified the WAL segment size. You may start with 100 or more depending on the space and the amount of WAL that could be generated during a backup.
+
+archive_command : This parameter takes a shell command or external programs. It can be a simple copy command to copy the WAL segments to another 
+location or a script that has the logic to archive the WALs to S3 or a remote backup server.
+
 listen_addresses : Specifies which IP interfaces could accept connections. You could specify all the TCP/IP addresses on which the server could listen to connections from client. ‘*’ means all available IP interfaces. The default : localhost allows only local TCP/IP connections to be made to the postgres server.
-hot_standby : Must be set to ON on standby/replica and has no effect on the master. However, when you setup your replication, parameters set on the master are automatically copied. This parameter is important to enable READS on slave. Otherwise, you cannot run your SELECT queries against slave.
+
+hot_standby : Must be set to ON on standby/replica and has no effect on the master. However, when you setup your replication, parameters set on the 
+master are automatically copied. This parameter is important to enable READS on slave. Otherwise, you cannot run your SELECT queries against slave.
+
+
 
 $ $EDITOR postgresql.conf
+
 ```
 # To enable read-only queries on a standby server, wal_level must be set to
 # "hot_standby". But you can choose "archive" if you never connect to the
 # server in standby mode.
+
 wal_level = hot_standby
 
 # Set the maximum number of concurrent connections from the standby servers.
