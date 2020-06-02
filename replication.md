@@ -109,10 +109,42 @@ restore_command = 'cp /path_to/archive/%f "%p"'
 
 Start postgres in the standby server. It will start streaming replication.
 
+
+## How to Monitor Replication
+
+On Master
+```
+select usename,application_name,client_addr,backend_start,state,sync_state from pg_stat_replication ;
+  usename   | application_name |  client_addr   |         backend_start         |   state   | sync_state
+------------+------------------+----------------+-------------------------------+-----------+------------
+ replicator | walreceiver      | 178.128.228.63 | 2020-06-02 00:45:54.011998+00 | streaming | async
+(1 row)
+```
+
+On Slave
+
+```
+postgres=# select * from pg_stat_wal_receiver;
+ pid  |  status   | receive_start_lsn | receive_start_tli | received_lsn | received_tli |      last_msg_send_time       |     last_msg_receipt_time     | latest_end_lsn |        latest_end_time        | slot_name |  sender_host  | sender_port |
+                                                                            conninfo
+------+-----------+-------------------+-------------------+--------------+--------------+-------------------------------+-------------------------------+----------------+-------------------------------+-----------+---------------+-------------+----------------------------
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 1148 | streaming | 0/8000000         |                 1 | 0/81BA090    |            1 | 2020-06-02 00:55:43.979656+00 | 2020-06-02 00:55:43.980689+00 | 0/81BA090      | 2020-06-02 00:50:13.266865+00 |           | 165.227.44.48 |        5432 | user=replicator password=**
+****** dbname=replication host=165.227.44.48 port=5432 fallback_application_name=walreceiver sslmode=prefer sslcompression=0 gssencmode=prefer krbsrvname=postgres target_session_attrs=any
+(1 row)
+
+```
+
+
 ### How to do failover
 
 Create the trigger file in the standby after the primary fails.
+
 How to stop the primary or the standby server
+
 Shut down it as usual (pg_ctl stop).
+
 How to restart streaming replication after failover
-Repeat the operations from 6th; making a fresh backup, some configurations and starting the original primary as the standby. The primary server doesn't need to be stopped during these operations.
+
+Repeat the operations from 6th; making a fresh backup, some configurations and starting the original primary as the standby. The primary server doesn't 
+need to be stopped during these operations.
