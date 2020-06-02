@@ -12,10 +12,11 @@ $ $EDITOR postgresql.conf
 
 listen_addresses = '192.168.0.10'
 $ $EDITOR pg_hba.conf
-
+```
 # The standby server must connect with a user that has replication privileges.
 # TYPE  DATABASE        USER            ADDRESS                 METHOD
   host  replication     replication     192.168.0.20/32         md5
+```
 
 The following parameters on the master are considered as mandatory when setting up streaming replication.
 
@@ -28,7 +29,7 @@ listen_addresses : Specifies which IP interfaces could accept connections. You c
 hot_standby : Must be set to ON on standby/replica and has no effect on the master. However, when you setup your replication, parameters set on the master are automatically copied. This parameter is important to enable READS on slave. Otherwise, you cannot run your SELECT queries against slave.
 
 $ $EDITOR postgresql.conf
-
+```
 # To enable read-only queries on a standby server, wal_level must be set to
 # "hot_standby". But you can choose "archive" if you never connect to the
 # server in standby mode.
@@ -51,26 +52,38 @@ wal_keep_segments = 32
 # segments required for the standby server, this is not necessary.
 archive_mode    = on
 archive_command = 'cp %p /path_to/archive/%f'
+```
 
+### SQL Command to setup this
+```
 ALTER SYSTEM SET wal_level TO 'hot_standby';
 ALTER SYSTEM SET archive_mode TO 'ON';
 ALTER SYSTEM SET max_wal_senders TO '5';
 ALTER SYSTEM SET wal_keep_segments TO '10';
 ALTER SYSTEM SET listen_addresses TO '*';
 ALTER SYSTEM SET hot_standby TO 'ON';
+```
+### Load config
 
+```
 psql -U postgres -p 5432 -c "select pg_reload_conf()"
+```
 
 On Slave
-
+```
 pg_basebackup -h 192.168.0.28 -U replicator -p 5432 -D $PGDATA -P -Xs -R
+```
 
-Potential error
+### Potential error
 
+```
 pg_basebackup: error: directory "/var/lib/pgsql/12/data" exists but is not empty
+```
 
 Create a recovery command file in the standby server; the following parameters are required for streaming replication.
+
 $ $EDITOR recovery.conf
+```
 # Note that recovery.conf must be in $PGDATA directory.
 # It should NOT be located in the same directory as postgresql.conf
 
@@ -92,10 +105,12 @@ trigger_file = '/path_to/trigger'
 # a large workload can cause segments to be recycled before the standby
 # is fully synchronized, requiring you to start again from a new base backup.
 restore_command = 'cp /path_to/archive/%f "%p"'
+```
 
 Start postgres in the standby server. It will start streaming replication.
 
-How to do failover
+### How to do failover
+
 Create the trigger file in the standby after the primary fails.
 How to stop the primary or the standby server
 Shut down it as usual (pg_ctl stop).
