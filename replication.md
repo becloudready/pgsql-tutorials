@@ -93,7 +93,7 @@ psql -U postgres -p 5432 -c "select pg_reload_conf()"
 
 On Slave
 ```
-pg_basebackup -h 192.168.0.28 -U replicator -p 5432 -D $PGDATA -P -Xs -R
+pg_basebackup -h 192.168.0.28 -U replication -p 5432 -D $PGDATA -P -Xs -R
 ```
 
 ### Potential error
